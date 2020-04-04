@@ -1,29 +1,42 @@
-# Data Project README file
+# Final Ironhack Project
 
-The README file describes the essence of the project playing the most important role. Most visitors will simply scroll down about twice on the README and leave if they are not interested. So, the README file should provide the reason **why** to checkout your project!!!). 
-Bearing that in mind, your job is to: 
-- Tell them what it is (with context).
-- Show them what it looks like in action.
-- Show them how they use it.
-- Tell them any other relevant details.
 
-![Image](https://res.cloudinary.com/springboard-images/image/upload/q_auto,f_auto,fl_lossy/wordpress/2019/05/aiexcerpt.png)
+## Overview
+
+*The goal of this project is to create a program that, when you enter the ingredients you want to cook with, returns the recipes for which you are missing the fewest ingredients and the quickest to prepare
+
+
+## Results
+
+**Input**
+
+- The ingredients you want to use for cooking (whatever you have in your pantry or fridge, etc).
+- Intolerances: You can select gluten free or lactose free recipes.
+- If there is any food you do not want to cook with, you can also indicate it.
+
+**Output**
+
+The URL with three best recipes you can make with the input entered, sorted by:
+1. Those for which you are missing fewer ingredients.
+2. Those for which the preparation time is shorter.
+  
+## Data applied
+  
+Recipe data has been obtained through web scraping to a recipe page
+- https://www.lecturas.com/recetas
+
+## Procedure
+
+  **1. Acquisition:** Create a database through data collected with web scraping.
+  
+  **2. Wrangling:** Data cleaning - Change the data type of the numeric columns (from object to integer or float),      Standardize the data format of each column, etc.
+  
+  **3. Analysis and Reporting:** Analyze the data to select the best recipes!
+
+
+![Image](https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2019/08/29/15670724438459.jpg)
 
 ---
-
-## **Formatting**
-Your readers will most likely view your README in a browser so please keep that in mind when formatting its content: 
-- Use proper format when necesary (e.g.: `import pandas as pd`). 
-- Categorize content using two or three levels of header beneath. 
-- Make use of **emphasis** to call out important words. 
-- Link to project pages for related libraries you mention. Link to Wikipedia, Wiktionary, even Urban Dictionary definitions for words of which a reader may not be familiar. Make amusing cultural references. 
-- Add links to related projects or services. 
-
-> Here you have a markdown cheatsheet [Link](https://commonmark.org/help/) and tutorial [Link](https://commonmark.org/help/tutorial/).
-
-
-## **Start writing ASAP:**
-*Last but not least, by writing your README soon you give yourself some pretty significant advantages. Most importantly, you’re giving yourself a chance to think through the project without the overhead of having to change code every time you change your mind about how something should be organized or what should be included.*
 
 
 ## **Suggested Structure:**
@@ -78,22 +91,5 @@ Next steps, features planned, known bugs (shortlist).
 ### :information_source: **Further info**
 Credits, alternatives, references, license.
 
-### :love_letter: **Contact info**
+### :love_letter: **Contact info*
 Getting help, getting involved, hire me please.
-
----
-
-> Here you have some repo examples:
-- [Mamba (OCR-Translator-Assistant)](https://github.com/YonatanRA/OCR-translator-assistant-project)
-- [Art Classification](https://github.com/serguma/art_classification)
-- [OSNet-IBN (width x 1.0) Lite](https://github.com/RodMech/OSNet-IBN1-Lite)
-- [Movie Founder](https://github.com/Alfagu/final-project-Ironhack-0419mad)
-- [Convolutional Neural Network to detect Pneumonia](https://github.com/jmolins89/final-project)
-- [Brain tumor detection project](https://github.com/alonsopdani/brain-tumor-detection-project)
-- [Policy-Gradient-Methods](https://github.com/cyoon1729/Policy-Gradient-Methods)
-
-> Here you have some tools and references:
-- [Make a README](https://www.makeareadme.com/)
-- [Awesome README](https://github.com/matiassingers/awesome-readme)
-- [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-
