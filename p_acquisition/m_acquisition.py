@@ -2,6 +2,6 @@ import pandas as pd
 
 # acquisition functions
 
-def acquire():
-    data = pd.read_csv('./data/raw/vehicles.csv')
-    return data
+def acquire(path):
+    recipe_df = pd.read_csv(path)
+    return recipe_df

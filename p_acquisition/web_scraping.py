@@ -1,7 +1,7 @@
 from selenium import webdriver
 import time
 import numpy as np
-import json
+import pandas as pd
 
 
 def web_scraping(link):
@@ -487,11 +487,12 @@ def web_scraping(link):
                     time.sleep(2)
         else:
             current_link = driver.current_url
-            print(f"Error at {current_link} and end of the loop")
-            break
+            print(f"Error at {current_link}")
+            pass
 
-    with open('../data/raw/web_scraping_recipes_pycharm_1.json', 'w') as json_file:
-        json.dump(recipes_list, json_file)
+    df_recipes = pd.DataFrame(recipes_list)
+
+    df_recipes.to_csv(f'../data/raw/web_scraping_recipes.csv', index=False)
 
     driver.quit()
 
