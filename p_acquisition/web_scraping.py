@@ -1,7 +1,7 @@
 from selenium import webdriver
 import time
 import numpy as np
-import pandas as pd
+import json
 
 
 def web_scraping(link):
@@ -20,18 +20,16 @@ def web_scraping(link):
     driver.set_page_load_timeout(10)
 
     for x in np.arange(len(categories) - 1):
-        time.sleep(3)
-        categories = driver.find_elements_by_tag_name('h4')
-        category = categories[x].text
         try:
             categories = driver.find_elements_by_tag_name('h4')
             driver.execute_script("arguments[0].click()", categories[x])
+            # category = categories[x].text
             time.sleep(2)
             while True:
                 next_page_btn = driver.find_elements_by_class_name('next')
                 if len(next_page_btn) < 1:
                     recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
-                    for x in np.arange(len(recipe_sumup_scrap) - 1):
+                    for x in np.arange(len(recipe_sumup_scrap)):
                         recipe_dict = {}
                         time.sleep(2)
                         recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -71,19 +69,24 @@ def web_scraping(link):
                         # images_url
                         images = driver.find_elements_by_tag_name('img')
                         images_list = [image.get_attribute('src') for image in images]
-                        recipe_image_url = images_list[1]
-                        recipe_dict["recipe_image_url"] = recipe_image_url
+                        recipe_dict["recipe_image_url"] = images_list[1]
                         # category
+                        category = driver.find_element_by_tag_name('h2').text
                         recipe_dict["category"] = category
+                        # extra_info
+                        more_info = driver.find_elements_by_xpath(
+                            '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                        more_info_list = [info.text for info in more_info]
+                        recipe_dict["more_info"] = more_info_list
                         # recipe_list append
                         recipes_list.append(recipe_dict)
                         driver.back()
                         time.sleep(2)
-                    print(f'{category} finished')
+                    print(f"{category} finished")
                     break
                 else:
                     recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
-                    for x in np.arange(len(recipe_sumup_scrap) - 1):
+                    for x in np.arange(len(recipe_sumup_scrap)):
                         recipe_dict = {}
                         time.sleep(2)
                         recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -123,10 +126,15 @@ def web_scraping(link):
                         # images_url
                         images = driver.find_elements_by_tag_name('img')
                         images_list = [image.get_attribute('src') for image in images]
-                        recipe_image_url = images_list[1]
-                        recipe_dict["recipe_image_url"] = recipe_image_url
+                        recipe_dict["recipe_image_url"] = images_list[1]
                         # category
+                        category = driver.find_element_by_tag_name('h2').text
                         recipe_dict["category"] = category
+                        # extra_info
+                        more_info = driver.find_elements_by_xpath(
+                            '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                        more_info_list = [info.text for info in more_info]
+                        recipe_dict["more_info"] = more_info_list
                         # recipe_list append
                         recipes_list.append(recipe_dict)
                         driver.back()
@@ -148,7 +156,7 @@ def web_scraping(link):
                     next_page_btn = driver.find_elements_by_class_name('next')
                     if len(next_page_btn) < 1:
                         recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
-                        for x in np.arange(len(recipe_sumup_scrap) - 1):
+                        for x in np.arange(len(recipe_sumup_scrap)):
                             recipe_dict = {}
                             time.sleep(2)
                             recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -188,19 +196,24 @@ def web_scraping(link):
                             # images_url
                             images = driver.find_elements_by_tag_name('img')
                             images_list = [image.get_attribute('src') for image in images]
-                            recipe_image_url = images_list[1]
-                            recipe_dict["recipe_image_url"] = recipe_image_url
+                            recipe_dict["recipe_image_url"] = images_list[1]
                             # category
+                            category = driver.find_element_by_tag_name('h2').text
                             recipe_dict["category"] = category
+                            # extra_info
+                            more_info = driver.find_elements_by_xpath(
+                                '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                            more_info_list = [info.text for info in more_info]
+                            recipe_dict["more_info"] = more_info_list
                             # recipe_list append
                             recipes_list.append(recipe_dict)
                             driver.back()
                             time.sleep(2)
-                        print(f'{category} finished')
+                        print(f"{category} finished")
                         break
                     else:
                         recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
-                        for x in np.arange(len(recipe_sumup_scrap) - 1):
+                        for x in np.arange(len(recipe_sumup_scrap)):
                             recipe_dict = {}
                             time.sleep(2)
                             recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -240,10 +253,15 @@ def web_scraping(link):
                             # images_url
                             images = driver.find_elements_by_tag_name('img')
                             images_list = [image.get_attribute('src') for image in images]
-                            recipe_image_url = images_list[1]
-                            recipe_dict["recipe_image_url"] = recipe_image_url
+                            recipe_dict["recipe_image_url"] = images_list[1]
                             # category
+                            category = driver.find_element_by_tag_name('h2').text
                             recipe_dict["category"] = category
+                            # extra_info
+                            more_info = driver.find_elements_by_xpath(
+                                '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                            more_info_list = [info.text for info in more_info]
+                            recipe_dict["more_info"] = more_info_list
                             # recipe_list append
                             recipes_list.append(recipe_dict)
                             driver.back()
@@ -254,9 +272,7 @@ def web_scraping(link):
                 main_page = driver.find_elements_by_css_selector(".left [href]")
                 driver.execute_script("arguments[0].click()", main_page[1])
                 time.sleep(2)
-
             else:
-                current_link = driver.current_url
                 print(f"TimeoutError at {current_link}")
                 driver.get(current_link)
                 driver.set_page_load_timeout(10)
@@ -265,7 +281,7 @@ def web_scraping(link):
                         next_page_btn = driver.find_elements_by_class_name('next')
                         if len(next_page_btn) < 1:
                             recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
-                            for x in np.arange(len(recipe_sumup_scrap) - 1):
+                            for x in np.arange(len(recipe_sumup_scrap)):
                                 recipe_dict = {}
                                 time.sleep(2)
                                 recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -305,15 +321,20 @@ def web_scraping(link):
                                 # images_url
                                 images = driver.find_elements_by_tag_name('img')
                                 images_list = [image.get_attribute('src') for image in images]
-                                recipe_image_url = images_list[1]
-                                recipe_dict["recipe_image_url"] = recipe_image_url
+                                recipe_dict["recipe_image_url"] = images_list[1]
                                 # category
+                                category = driver.find_element_by_tag_name('h2').text
                                 recipe_dict["category"] = category
+                                # extra_info
+                                more_info = driver.find_elements_by_xpath(
+                                    '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                                more_info_list = [info.text for info in more_info]
+                                recipe_dict["more_info"] = more_info_list
                                 # recipe_list append
                                 recipes_list.append(recipe_dict)
                                 driver.back()
                                 time.sleep(2)
-                            print(f'{category} finished')
+                            print(f"{category} finished")
                             break
                         else:
                             recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -357,10 +378,15 @@ def web_scraping(link):
                                 # images_url
                                 images = driver.find_elements_by_tag_name('img')
                                 images_list = [image.get_attribute('src') for image in images]
-                                recipe_image_url = images_list[1]
-                                recipe_dict["recipe_image_url"] = recipe_image_url
+                                recipe_dict["recipe_image_url"] = images_list[1]
                                 # category
+                                category = driver.find_element_by_tag_name('h2').text
                                 recipe_dict["category"] = category
+                                # extra_info
+                                more_info = driver.find_elements_by_xpath(
+                                    '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                                more_info_list = [info.text for info in more_info]
+                                recipe_dict["more_info"] = more_info_list
                                 # recipe_list append
                                 recipes_list.append(recipe_dict)
                                 driver.back()
@@ -379,7 +405,7 @@ def web_scraping(link):
                         next_page_btn = driver.find_elements_by_class_name('next')
                         if len(next_page_btn) < 1:
                             recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
-                            for x in np.arange(len(recipe_sumup_scrap) - 1):
+                            for x in np.arange(len(recipe_sumup_scrap)):
                                 recipe_dict = {}
                                 time.sleep(2)
                                 recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -419,15 +445,20 @@ def web_scraping(link):
                                 # images_url
                                 images = driver.find_elements_by_tag_name('img')
                                 images_list = [image.get_attribute('src') for image in images]
-                                recipe_image_url = images_list[1]
-                                recipe_dict["recipe_image_url"] = recipe_image_url
+                                recipe_dict["recipe_image_url"] = images_list[1]
                                 # category
+                                category = driver.find_element_by_tag_name('h2').text
                                 recipe_dict["category"] = category
+                                # extra_info
+                                more_info = driver.find_elements_by_xpath(
+                                    '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                                more_info_list = [info.text for info in more_info]
+                                recipe_dict["more_info"] = more_info_list
                                 # recipe_list append
                                 recipes_list.append(recipe_dict)
                                 driver.back()
                                 time.sleep(2)
-                            print(f'{category} finished')
+                            print(f"{category} finished")
                             break
                         else:
                             recipe_sumup_scrap = driver.find_elements_by_class_name("element-header")
@@ -471,10 +502,15 @@ def web_scraping(link):
                                 # images_url
                                 images = driver.find_elements_by_tag_name('img')
                                 images_list = [image.get_attribute('src') for image in images]
-                                recipe_image_url = images_list[1]
-                                recipe_dict["recipe_image_url"] = recipe_image_url
+                                recipe_dict["recipe_image_url"] = images_list[1]
                                 # category
+                                category = driver.find_element_by_tag_name('h2').text
                                 recipe_dict["category"] = category
+                                # extra_info
+                                more_info = driver.find_elements_by_xpath(
+                                    '(/html/body/form/main/article/div[1]/div[2]/div[2]/div/div/div/span)')
+                                more_info_list = [info.text for info in more_info]
+                                recipe_dict["more_info"] = more_info_list
                                 # recipe_list append
                                 recipes_list.append(recipe_dict)
                                 driver.back()
@@ -487,12 +523,13 @@ def web_scraping(link):
                     time.sleep(2)
         else:
             current_link = driver.current_url
-            print(f"Error at {current_link}")
+            print(f"check if error at {current_link}")
             pass
 
-    df_recipes = pd.DataFrame(recipes_list)
+    #df_recipes = pd.DataFrame(recipes_list)
 
-    df_recipes.to_csv(f'../data/raw/web_scraping_recipes.csv', index=False)
+    with open('../data/raw/web_scraping_recipes_new_pycharm.json', 'w') as json_file:
+        json.dump(recipes_list, json_file)
 
     driver.quit()
 
