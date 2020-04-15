@@ -4,7 +4,7 @@ from p_acquisition.m_acquisition import acquire
 
 
 def main():
-    data = acquire('../data/raw/web_scraping_recipes.csv')
+    data = acquire('../data/raw/web_scraping_recipes_new.json')
     data_cleaned = cleaning_dataset(data)
 
 

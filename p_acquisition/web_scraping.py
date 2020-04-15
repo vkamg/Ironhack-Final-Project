@@ -528,7 +528,7 @@ def web_scraping(link):
 
     #df_recipes = pd.DataFrame(recipes_list)
 
-    with open('../data/raw/web_scraping_recipes_new_pycharm.json', 'w') as json_file:
+    with open('../data/raw/web_scraping_recipes_new.json', 'w') as json_file:
         json.dump(recipes_list, json_file)
 
     driver.quit()

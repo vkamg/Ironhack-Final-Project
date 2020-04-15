@@ -4,22 +4,39 @@ import ast
 
 # wrangling functions
 
-def lowercase_data(recipe_df):
-    recipe_df["category"] = recipe_df["category"].str.lower()
-    recipe_df["ingredients"] = recipe_df["ingredients"].str.lower()
-    return recipe_df
 
-def normalize(string_column):
+def lowercase_ing(column):
+    ingredients_list = []
+    for ing in column:
+        result = ing.lower()
+        ingredients_list.append(result)
+    return ingredients_list
+
+
+"""def normalize(string_column):
     a,b = 'áéíóú','aeiou'
     trans = str.maketrans(a,b)
-    return string_column.translate(trans)
+    return string_column.translate(trans)"""
 
-
-def add_main_category(category_column):
-    if category_column != 'postres y dulces':
-        return "principal"
+def clean_more_info(list_x):
+    if "Tipo Plato:" in list_x:
+        i = list_x.index("Tipo Plato:")
+        i2 = list_x.index("Precio:")
+        result = list_x[(i+1):i2]
+        return result
     else:
+        return None
+
+
+def main_category_clasification(cat_column, dish_column):
+    dish_str = str(dish_column)
+    if re.search("Postres", dish_str) != None:
         return "postre"
+    elif cat_column == "postres y dulces":
+        return "postre"
+    else:
+        return "principal"
+
 
 
 def change_time_cal(time, cal):
@@ -94,11 +111,21 @@ def wrangle(df,year):
     return filtered
 
 
-def clean_data(dataset):
-    recipe_df = lowercase_data(dataset)
-    recipe_df["ingredients_clean"] = recipe_df.apply(lambda x: normalize(x["ingredients"]), axis=1)
+def clean_data(recipe_df):
+    recipe_df["category"] = recipe_df["category"].str.lower()
+    recipe_df["ingredients"] = recipe_df.apply(lambda x: lowercase_ing(x["ingredients"]), axis=1)
+    """recipe_df["ingredients_clean"] = recipe_df.apply(lambda x: normalize(x["ingredients"]), axis=1)"""
     recipe_df.drop_duplicates(subset=["recipe_url", "category"], keep="first", inplace=True)
-    recipe_df["main_category"] = recipe_df.apply(lambda x: add_main_category(x["category"]), axis=1)
+    recipe_df = recipe_df[recipe_df.category != 'mermeladas y confituras']
+    recipe_df = recipe_df[recipe_df.category != 'salsas']
+
+    recipe_df["main_category"] = recipe_df.apply(lambda x: main_category_clasification(x["category"],
+                                                                                       x["tipo_plato"]),
+                                                 axis=1)
+
+
+
+
     recipe_df['time_preparation'].fillna('missing', inplace=True)
     recipe_df['calories'].fillna('missing', inplace=True)
     recipe_df["calories"] = recipe_df.apply(lambda x: change_time_cal(x["time_preparation"], x["calories"]),
