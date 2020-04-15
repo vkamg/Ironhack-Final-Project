@@ -1,21 +1,19 @@
 import argparse
 
 from p_acquisition.m_acquisition import acquire
+from p_wrangling.m_wrangling import clean_data
 
 
-def main():
-    data = acquire('../data/raw/web_scraping_recipes_new.json')
-    data_cleaned = cleaning_dataset(data)
-
-
-
-
-    return
+def main(path):
+    data = acquire(path)
+    data_cleaned = clean_data(data)
+    data_cleaned.to_csv(f'./data/processed/ingredients_df_pycharm.csv', index=False)
+    ok = print("script working :)")
+    return ok
 
 
 
 if __name__ == '__main__':
-    year = int(input('Enter the year: '))
-    title = 'Top 10 Manufacturers by Fuel Efficiency ' + str(year)
-    arguments = argument_parser()
-    main(arguments)
+
+    path = './data/raw/web_scraping_recipes_new.json'
+    main(path)

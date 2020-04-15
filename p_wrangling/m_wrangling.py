@@ -4,7 +4,6 @@ import ast
 
 # wrangling functions
 
-
 def lowercase_ing(column):
     ingredients_list = []
     for ing in column:
@@ -12,11 +11,6 @@ def lowercase_ing(column):
         ingredients_list.append(result)
     return ingredients_list
 
-
-"""def normalize(string_column):
-    a,b = 'áéíóú','aeiou'
-    trans = str.maketrans(a,b)
-    return string_column.translate(trans)"""
 
 def clean_more_info(list_x):
     if "Tipo Plato:" in list_x:
@@ -36,7 +30,6 @@ def main_category_clasification(cat_column, dish_column):
         return "postre"
     else:
         return "principal"
-
 
 
 def change_time_cal(time, cal):
@@ -68,11 +61,13 @@ def gluten_free(intolerances):
     else:
         return 0
 
+
 def lactose_free(intolerances):
     if 'Sin lactosa' in intolerances:
         return 1
     else:
         return 0
+
 
 def egg_free(intolerances):
     if 'Sin huevo' in intolerances:
@@ -80,11 +75,13 @@ def egg_free(intolerances):
     else:
         return 0
 
+
 def sucrose_fructose_free(intolerances):
     if 'Sin sacarosa o fructosa' in intolerances:
         return 1
     else:
         return 0
+
 
 def low_sodium(intolerances):
     if 'Baja en sodio' in intolerances:
@@ -94,39 +91,33 @@ def low_sodium(intolerances):
 
 
 def clean_ingredients(ingred_column):
-    ingred = ast.literal_eval(ingred_column)
     ingredients_list = []
-    for ing in ingred:
+    for ing in ingred_column:
         clean_ingred = re.sub(" para.*$", "", ing)
         ingredients_list.append(clean_ingred)
     return ingredients_list
+
 
 def num_ingred(column):
     return len(column)
 
 
-
-def wrangle(df,year):
-    filtered = df[df['Year']==year]
-    return filtered
-
-
 def clean_data(recipe_df):
+    print("cleaning...")
     recipe_df["category"] = recipe_df["category"].str.lower()
+    print("cleaning...1")
     recipe_df["ingredients"] = recipe_df.apply(lambda x: lowercase_ing(x["ingredients"]), axis=1)
     """recipe_df["ingredients_clean"] = recipe_df.apply(lambda x: normalize(x["ingredients"]), axis=1)"""
+    print("cleaning...2")
     recipe_df.drop_duplicates(subset=["recipe_url", "category"], keep="first", inplace=True)
     recipe_df = recipe_df[recipe_df.category != 'mermeladas y confituras']
     recipe_df = recipe_df[recipe_df.category != 'salsas']
-
+    recipe_df["tipo_plato"] = recipe_df.apply(lambda x: clean_more_info(x["more_info"]), axis=1)
     recipe_df["main_category"] = recipe_df.apply(lambda x: main_category_clasification(x["category"],
                                                                                        x["tipo_plato"]),
                                                  axis=1)
-
-
-
-
     recipe_df['time_preparation'].fillna('missing', inplace=True)
+    print("cleaning...3")
     recipe_df['calories'].fillna('missing', inplace=True)
     recipe_df["calories"] = recipe_df.apply(lambda x: change_time_cal(x["time_preparation"], x["calories"]),
                                             axis=1)
@@ -141,9 +132,29 @@ def clean_data(recipe_df):
     recipe_df["sucrose_fructose_free"] = recipe_df.apply(lambda x: sucrose_fructose_free(x["intolerances"]),
                                                          axis=1)
     recipe_df["low_sodium"] = recipe_df.apply(lambda x: low_sodium(x["intolerances"]), axis=1)
-    recipe_df["ingredients_list"] = recipe_df.apply(lambda x: clean_ingredients(x["ingredients_clean"]),
-                                                    axis=1)
-    recipe_df["num_ingredients"] = recipe_df.apply(lambda x: num_ingred(x["ingredients_list"]), axis=1)
+    print("cleaning...4")
+    recipe_df["ingredients_list"] = recipe_df.apply(lambda x: clean_ingredients(x['ingredients']), axis=1)
+    ingredients_df = recipe_df.ingredients_list.apply(pd.Series) \
+        .merge(recipe_df, right_index=True, left_index=True) \
+        .melt(id_vars=['recipe_name', 'ingredients', 'ingred_quantity', 'time_preparation',
+                       'calories', 'intolerances', 'recipe_url', 'recipe_image_url',
+                       'category', 'more_info', 'recipe_steps', 'tipo_plato', 'main_category',
+                       'time_preparation(min)', 'calories(kcal)', 'gluten_free', 'egg_free',
+                       'sucrose_fructose_free', 'low_sodium', 'lactose_free',
+                       'ingredients_list'], value_name="ingredient")
+    print("cleaning...5")
+    ingredients_df = ingredients_df[ingredients_df['ingredient'].notna()]
+    ingredients_df["num_ingredients"] = ingredients_df.apply(lambda x: num_ingred(x["ingredients_list"]),
+                                                             axis=1)
+    print("cleaning...6")
+    ingredients_df = ingredients_df[['recipe_name', 'recipe_url', 'ingredient', 'variable', 'num_ingredients',
+                                     'category', 'main_category', 'tipo_plato', 'time_preparation(min)',
+                                     'calories(kcal)', 'gluten_free', 'egg_free',
+                                     'sucrose_fructose_free', 'low_sodium', 'lactose_free', ]]
+    print("cleaning...7")
+    ingredients_df.reset_index(drop=True, inplace=True)
+
+    return ingredients_df
 
 
 
