@@ -28,8 +28,11 @@ def main_category_clasification(cat_column, dish_column):
         return "postre"
     elif cat_column == "postres y dulces":
         return "postre"
+    elif re.search("Aperitivos y tapas", dish_str) != None:
+        return "tapas"
     else:
         return "principal"
+
 
 
 def change_time_cal(time, cal):
@@ -134,27 +137,15 @@ def clean_data(recipe_df):
     recipe_df["low_sodium"] = recipe_df.apply(lambda x: low_sodium(x["intolerances"]), axis=1)
     print("cleaning...4")
     recipe_df["ingredients_list"] = recipe_df.apply(lambda x: clean_ingredients(x['ingredients']), axis=1)
-    ingredients_df = recipe_df.ingredients_list.apply(pd.Series) \
-        .merge(recipe_df, right_index=True, left_index=True) \
-        .melt(id_vars=['recipe_name', 'ingredients', 'ingred_quantity', 'time_preparation',
-                       'calories', 'intolerances', 'recipe_url', 'recipe_image_url',
-                       'category', 'more_info', 'recipe_steps', 'tipo_plato', 'main_category',
-                       'time_preparation(min)', 'calories(kcal)', 'gluten_free', 'egg_free',
-                       'sucrose_fructose_free', 'low_sodium', 'lactose_free',
-                       'ingredients_list'], value_name="ingredient")
-    print("cleaning...5")
-    ingredients_df = ingredients_df[ingredients_df['ingredient'].notna()]
-    ingredients_df["num_ingredients"] = ingredients_df.apply(lambda x: num_ingred(x["ingredients_list"]),
-                                                             axis=1)
-    print("cleaning...6")
-    ingredients_df = ingredients_df[['recipe_name', 'recipe_url', 'ingredient', 'variable', 'num_ingredients',
-                                     'category', 'main_category', 'tipo_plato', 'time_preparation(min)',
-                                     'calories(kcal)', 'gluten_free', 'egg_free',
-                                     'sucrose_fructose_free', 'low_sodium', 'lactose_free', ]]
-    print("cleaning...7")
-    ingredients_df.reset_index(drop=True, inplace=True)
+    recipe_df["num_ingredients"] = recipe_df.apply(lambda x: num_ingred(x["ingredients_list"]),
+                                                   axis=1)
+    recipe_df = recipe_df[['recipe_image_url', 'recipe_name', 'recipe_url', 'ingredients_list',
+                           'time_preparation(min)', 'calories(kcal)', 'gluten_free', 'egg_free',
+                           'sucrose_fructose_free', 'low_sodium', 'lactose_free', 'tipo_plato',
+                           'main_category', 'category', 'num_ingredients']]
+    recipe_df.reset_index(drop=True, inplace=True)
 
-    return ingredients_df
+    return recipe_df
 
 
 
