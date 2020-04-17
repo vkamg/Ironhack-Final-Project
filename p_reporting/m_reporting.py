@@ -1,7 +1,7 @@
 import pandas as pd
 import Levenshtein
 import itertools
-from fuzzywuzzy import fuzz
+from fuzzywuzzy import process, fuzz
 import webbrowser
 import ast
 from selenium import webdriver
@@ -18,13 +18,16 @@ def input_list(string):
 
 
 def fuzzy_columns(column, input_string):
-    for ingred in input_string:
-        dif = fuzz.token_set_ratio(column, ingred)
-    if dif > 70:
+    best_match = process.extract(input_string, column, scorer=fuzz.WRatio, limit=1)
+    ratio = best_match[0][1]
+    if ratio > 80:
         return True
     else:
         return False
 
+def fuzzy_analysis(column, input_string):
+    dif = fuzz.token_set_ratio(column, input_string)
+    return dif
 
 def num_missing(recipe_ingred, active_ingred):
     missing_ingred = recipe_ingred - active_ingred
@@ -32,7 +35,7 @@ def num_missing(recipe_ingred, active_ingred):
 
 
 def rating(match, missing):
-    result = 0.75*match-0.25*missing
+    result = 0.50*match-0.50*missing
     return result
 
 def normalize(string):
@@ -60,8 +63,28 @@ def result(recipe_df, input_ing):
     recipe_df["recipe_rate"] = recipe_df.apply(lambda x: rating(x["active_ingred"], x["num_missing_ingred"]),
                                                axis=1)
     filter_principal = recipe_df['main_category'] == "principal"
-    output = recipe_df[filter_principal].sort_values(by=['recipe_rate', 'num_missing_ingred'],
-                                                        ascending=[False, True]).head(10)
+    output = recipe_df[filter_principal].sort_values(by=["num_missing_ingred", "recipe_rate"],
+                                                        ascending=[True, False]).head(10)
+
+    """analysis_df = recipe_df.ingredients_list.apply(pd.Series) \
+    .merge(recipe_df, right_index = True, left_index = True) \
+    .melt(id_vars = ['recipe_image_url', 'recipe_name', 'recipe_url', 'ingredients_list',
+       'time_preparation(min)', 'calories(kcal)', 'gluten_free', 'egg_free',
+       'sucrose_fructose_free', 'low_sodium', 'lactose_free', 'tipo_plato',
+       'main_category', 'category', 'num_ingredients', 'huevos',
+       'pechiga de pollo', 'lentejas', 'pimiento', 'arroz', 'leche',
+       'mantequilla', 'harina', 'sal', 'azúcar', 'aceite', 'zanahorias',
+       'queso', 'bacon', 'active_ingred', 'num_missing_ingred', 'recipe_rate'], value_name = "ingredient")
+
+    analysis_df = analysis_df[analysis_df['ingredient'].notna()]
+    analysis_df.reset_index(drop=True, inplace=True)
+
+    for ingred in input_ingred:
+        analysis_df[ingred] = analysis_df.apply(lambda x: fuzzy_analysis(x["ingredient"], ingred), axis=1)
+
+    analysis_df.to_csv(f'./data/results/pycharm_result_analysis.csv', index=False)"""
+
+
 
     recipe_name = output["recipe_name"].iloc[0]
     num_missing_ingred = output['num_missing_ingred'].iloc[0]
@@ -69,7 +92,7 @@ def result(recipe_df, input_ing):
     print(f"La mejor receta que puedes hacer con los ingredientes que has introducido es: {recipe_name}")
     print(f"Te faltan {num_missing_ingred} ingredientes")
     print(f"El tiempo de preparación es de {recipe_time} minutos")
-    go_to_recipe = input('¿Quieres ir a la receta?')
+    go_to_recipe = input('¿Quieres ir a la receta ?')
 
     input_answer = normalize(go_to_recipe)
 
@@ -82,4 +105,4 @@ def result(recipe_df, input_ing):
     else:
         print("Por favor, responde sí o no")
 
-    return
+    return output
