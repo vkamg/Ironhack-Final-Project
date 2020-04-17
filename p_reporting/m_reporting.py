@@ -17,6 +17,24 @@ def input_list(string):
     return input_list
 
 
+def matched(recipe_ingred, input_ingred):
+    new_list = []
+    for element in input_ingred:
+        try:
+            best_match = process.extract(element, recipe_ingred, scorer=fuzz.WRatio, limit=1)
+            if best_match[0][1] >= 80:
+                recipe_ingred.remove(best_match[0][0])
+                new_list.append(best_match[0][0])
+            else:
+                pass
+        except:
+            pass
+    return new_list
+
+
+def num_ingred(column):
+    return len(column)
+
 def fuzzy_columns(column, input_string):
     best_match = process.extract(input_string, column, scorer=fuzz.WRatio, limit=1)
     ratio = best_match[0][1]
@@ -53,18 +71,27 @@ def pop_recipe(url_):
 
 
 def result(recipe_df, input_ing):
-    input_ingred = input_list(input_ing)
-    for ingred in input_ingred:
-        recipe_df[ingred] = recipe_df.apply(lambda x: fuzzy_columns(x["ingredients_list"], ingred), axis=1)
-    recipe_df["active_ingred"] = recipe_df.select_dtypes(include=['bool']).sum(axis=1)
+
+    recipe_df["input"] = input_ing
+    recipe_df["input"] = recipe_df.apply(lambda x: input_list(x["input"]), axis=1)
+
+    """for ingred in input_ingred:
+        recipe_df[ingred] = recipe_df.apply(lambda x: fuzzy_columns(x["ingredients_list"], ingred), axis=1)"""
+    """recipe_df["active_ingred"] = recipe_df.select_dtypes(include=['bool']).sum(axis=1)"""
+
+    recipe_df["matched_ingred"] = recipe_df.apply(lambda x: matched(x["ingredients_list"], x["input"])
+                                                  , axis=1)
+
+    recipe_df["num_matched"] = recipe_df.apply(lambda x: num_ingred(x["matched_ingred"]), axis=1)
+
     recipe_df["num_missing_ingred"] = recipe_df.apply(lambda x: num_missing(x["num_ingredients"],
-                                                                                   x["active_ingred"]),
+                                                                                   x["num_matched"]),
                                                       axis=1)
-    recipe_df["recipe_rate"] = recipe_df.apply(lambda x: rating(x["active_ingred"], x["num_missing_ingred"]),
+    recipe_df["recipe_rate"] = recipe_df.apply(lambda x: rating(x["num_matched"], x["num_missing_ingred"]),
                                                axis=1)
     filter_principal = recipe_df['main_category'] == "principal"
-    output = recipe_df[filter_principal].sort_values(by=["num_missing_ingred", "recipe_rate"],
-                                                        ascending=[True, False]).head(10)
+    output = recipe_df[filter_principal].sort_values(by=["recipe_rate", "num_missing_ingred"],
+                                                        ascending=[False, True]).head(10)
 
     """analysis_df = recipe_df.ingredients_list.apply(pd.Series) \
     .merge(recipe_df, right_index = True, left_index = True) \
