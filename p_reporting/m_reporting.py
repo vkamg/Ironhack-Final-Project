@@ -119,7 +119,7 @@ def result(recipe_df, input_ing):
     print(f"La mejor receta que puedes hacer con los ingredientes que has introducido es: {recipe_name}")
     print(f"Te faltan {num_missing_ingred} ingredientes")
     print(f"El tiempo de preparación es de {recipe_time} minutos")
-    go_to_recipe = input('¿Quieres ir a la receta ?')
+    go_to_recipe = input('¿Quieres ir a la receta? ')
 
     input_answer = normalize(go_to_recipe)
 
