@@ -119,7 +119,6 @@ def result(df, input_ing, intolerance, avoid):
     df_clean["ingredients"] = df_clean.apply(lambda x: ingred_list(x["ingredients_list"]), axis=1)
     df_clean["input_string"] = input_ing
     df_clean["input"] = df_clean.apply(lambda x: input_list(x["input_string"]), axis=1)
-    print("1")
     if avoid == "no":
         pass
     else:
@@ -129,7 +128,7 @@ def result(df, input_ing, intolerance, avoid):
                                                                            x["avoid"]), axis=1)
         filter_avoid = df_clean["avoid_match"] == 0
         recipe_df = df_clean[filter_avoid]
-    print("2")
+
     recipe_df["matched_ingred"] = recipe_df.apply(lambda x: matched(x["ingredients"], x["input"])
                                                   , axis=1)
 
@@ -144,7 +143,7 @@ def result(df, input_ing, intolerance, avoid):
     recipe_df["recipe_rate"] = recipe_df.apply(lambda x: rating(x["num_matched"], x["num_missing_ingred"]),
                                                axis=1)
 
-    print("3")
+
     output = recipe_df.sort_values(by=["recipe_rate", "num_missing_ingred"],
                                                        ascending=[False, True]).head(10)
 
@@ -173,7 +172,6 @@ def result(df, input_ing, intolerance, avoid):
     else:
         print("Por favor, responde sí o no")
 
-    print("4")
 
 
 
