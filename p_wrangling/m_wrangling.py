@@ -337,7 +337,7 @@ def clean_data(path_lecturas, path_recetasgratis):
 if __name__ == '__main__':
 
     path_lecturas = './data/raw/web_scraping_recipes_new.json'
-    path_recetasgratis = './data/raw/web_scraping_recipes_new.json'
+    path_recetasgratis = './data/raw/web_scraping_recipes_recetasgratis.json'
     clean_data(path_lecturas, path_recetasgratis)
 
 

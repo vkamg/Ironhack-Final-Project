@@ -2,10 +2,11 @@ import argparse
 import pandas as pd
 from p_acquisition.acquisition_demo import acquire
 from p_reporting.output_demo import result
-
+import warnings
 
 
 def main(path, ingred, intolerances, avoid):
+    warnings.filterwarnings("ignore")
     data = acquire(path)
     result(data, ingred, intolerances, avoid)
     output = print("Gracias por utilizar ScrapChef")
