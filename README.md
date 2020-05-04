@@ -3,7 +3,7 @@
 
 ## Overview
 
-*The goal of this project is to create a program that, when you enter the ingredients you want to cook with, returns the recipes for which you are missing the fewest ingredients and the quickest to prepare
+*The goal of this project is create a recipe dataset using web scraping and then use that dataset in a script that, when you enter the ingredients you want to cook with, returns the recipe for which you have the fewest missing ingredients using most of the introduced ingredients.
 
 
 ## Results
@@ -16,14 +16,13 @@
 
 **Output**
 
-The URL with three best recipes you can make with the input entered, sorted by:
-1. Those for which you are missing fewer ingredients.
-2. Those for which the preparation time is shorter.
+- The script searches through more than 18,000 recipes and gives you back  the one where you use most of the ingredients you entered and for which you have the fewest missing ingredients. You can choose if you want to see the recipe at the time of the search (a page will open in your browser with the recipe) or if you want to see it later (the URL of the recipe will appear in the terminal for you to visit the page whenever you want)
   
 ## Data applied
   
-Recipe data has been obtained through web scraping to a recipe page
+Recipe data has been obtained through web scraping to two different recipes pages:
 - https://www.lecturas.com/recetas
+- https://www.recetasgratis.net/
 
 ## Procedure
 
@@ -36,60 +35,3 @@ Recipe data has been obtained through web scraping to a recipe page
 
 ![Image](https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2019/08/29/15670724438459.jpg)
 
----
-
-
-## **Suggested Structure:**
-
-### :raising_hand: **Name** 
-Self-explanatory names are best. If the name sounds too vague or unrelated, it may be a signal to move on. It also must be catchy. Images, Logo, Gif or some color is strongly recommended.
-
-### :baby: **Status**
-Alpha, Beta, 1.1, Ironhack Data Analytics Final Project, etc... It's OK to write a sentence, too. The goal is to let interested people know where this project is at.
-
-### :running: **One-liner**
-Having a one-liner that describes the pipeline/api/app is useful for getting an idea of what your code does in slightly greater detail. 
-
-### :computer: **Technology stack**
-Python, Pandas, Scipy, Scikit-learn, etc. Indicate the technological nature of the software, including primary programming language(s), main libraries and whether the software is intended as standalone or as a module in a framework or other ecosystem.
-
-### :boom: **Core technical concepts and inspiration**
-Why does it exist? Frame your project for the potential user. Compare/contrast your project with other, similar projects so the user knows how it is different from those projects. Highlight the technical concepts that your project demonstrates or supports. Keep it very brief.
-
-### :wrench: **Configuration**
-Requeriments, prerequisites, dependencies, installation instructions.
-
-### :see_no_evil: **Usage**
-Parameters, return values, known issues, thrown errors.
-
-### :file_folder: **Folder structure**
-```
-└── project
-    ├── __trash__
-    ├── .gitignore
-    ├── .env
-    ├── requeriments.txt
-    ├── README.md
-    ├── main_script.py
-    ├── notebooks
-    │   ├── notebook1.ipynb
-    │   └── notebook2.ipynb
-    ├── package1
-    │   ├── module1.py
-    │   └── module2.py
-    └── data
-        ├── raw
-        ├── processed
-        └── results
-```
-
-> Do not forget to include `__trash__` and `.env` in `.gitignore` 
-
-### :shit: **ToDo**
-Next steps, features planned, known bugs (shortlist).
-
-### :information_source: **Further info**
-Credits, alternatives, references, license.
-
-### :love_letter: **Contact info*
-Getting help, getting involved, hire me please.
